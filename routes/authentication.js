@@ -5,7 +5,7 @@ const router = new Router();
 
 const bcryptjs = require('bcryptjs');
 
-const User = require('../models/user');
+const User = require('./../models/user');
 
 // --------------Sign In
 
@@ -24,12 +24,14 @@ router.post('/sign-in', (req, res, next) => {
         next(new Error('USER_NOT_FOUND'));
       } else {
         user = document;
+        console.log(document);
         return bcryptjs.compare(password, document.passwordHash);
       }
     })
     .then(match => {
       if (match) {
         req.session.userId = user._id;
+        console.log(user._id);
         res.redirect('/');
       } else {
         next(new Error('USER_PASSWORD_WRONG'));
@@ -66,9 +68,9 @@ router.post('/sign-up', (req, res, next) => {
     });
 });
 
-/* router.post('/sign-out', (req, res, next) => {
+router.post('/sign-out', (req, res, next) => {
   req.session.destroy();
   res.redirect('/');
 });
- */
+
 module.exports = router;

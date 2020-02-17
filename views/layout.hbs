@@ -6,8 +6,17 @@
   </head>
   <body>
     <nav>
-      <a href="/authentication/sign-up">Sign Up</a>
-      <a href="/authentication/sign-in">Log In</a>
+      <a href="/">Home</a>
+      {{#if user}} 
+        <a href="/main">Secret Page</a>
+        <a href="/private">Private</a>
+        <form action="/authentication/sign-out" method="post">
+          <button>Log Out</button>
+        </form>
+      {{else}} 
+       <a href="/authentication/sign-up">Sign Up</a>
+       <a href="/authentication/sign-in">Log In</a>
+      {{/if}}
 
     </nav>
     {{{body}}}
