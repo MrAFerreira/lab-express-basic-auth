@@ -28,12 +28,26 @@ router.get('/profile/edit', protectRoute, passUserToViews, (req, res, next) => {
   res.render('edit');
 });
 
-router.post('/profile/edit', protectRoute, passUserToViews, deserializeUser, (req, res) => {
-  const userId = req.session.userId;
+router.post('/profile/edit', protectRoute, passUserToViews, deserializeUser, (req, res, next) => {
+  const userId = req.user._id;
   const { userName } = req.body;
   console.log(userId, { userName });
-  User.findByIdAndUpdate(userId, { userName: { userName } }, { runValidators: true });
-  res.redirect('/profile');
+  User.findByIdAndUpdate(userId, { userName })
+    .then(() => {
+      res.redirect('/profile');
+    })
+    .catch(error => {
+      next(error);
+    });
+
+  /*   User.findById(userId)
+    .then(user => {
+      console.log(user);
+      user.updateOne({ userName });
+      res.redirect('/profile');
+    })
+    .catch(error => next(error)); */
+  //(userId, { $set: { userName: userName } }, { runValidators: true });
 });
 
 module.exports = router;
